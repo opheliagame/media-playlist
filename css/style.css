@@ -1,0 +1,251 @@
+@font-face {
+  font-family: Sligoil;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://opheliagame.github.io/garden/static/Sligoil-Micro.woff2)
+    format("woff2");
+}
+
+* {
+  box-sizing: border-box;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+html {
+  scroll-behavior: smooth;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-height: 100%;
+  font-family: "Sligoil", Helvetica, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+p {
+  font-size: smaller;
+}
+
+button {
+  cursor: pointer;
+}
+
+nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 10px;
+  margin: 0px;
+}
+
+#title-link-heading {
+  padding: 0px 6px;
+  text-transform: lowercase;
+}
+
+#title-animation-container {
+  padding: 24px 6px 6px 6px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+#title-animation-container .letter {
+  font-size: xx-large;
+  position: relative;
+  width: 32px;
+  height: 32px;
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#title-animation-container .letter.animate {
+  animation: stretch 1s ease-in-out infinite;
+  animation-fill-mode: both;
+}
+
+#title-animation-container .letter .letter-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -10;
+}
+
+@keyframes jump {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes stretch {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+#main-container {
+  flex: 1;
+  overflow-y: hidden;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+#media-input {
+  border: 1px dashed var(--darkgray);
+  height: 100%;
+  overflow-y: auto;
+}
+
+#media-input:hover {
+  color: var(--highlight);
+  border-color: var(--highlight);
+}
+
+#media-input-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#add-empty-text-item-button {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+#player-container {
+  aspect-ratio: 16/9;
+  z-index: 0;
+  position: relative;
+}
+
+#player-controls-container {
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  pointer-events: none;
+}
+
+#player-play-button {
+  display: block;
+  z-index: 10;
+  position: absolute;
+  top: calc(50% - 20px);
+  left: calc(50% - 20px);
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+#player-reset-button {
+  display: none;
+  z-index: 10;
+  position: absolute;
+  top: calc(50% - 20px);
+  left: calc(50% - 20px);
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+#player-contents-container {
+  aspect-ratio: 16/9;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px dashed var(--darkgray);
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#playlist-contents-container {
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 0.5rem;
+}
+
+.playlist-item {
+  cursor: pointer;
+  height: 6rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.playlist-item p {
+  height: 100%;
+  width: 100%;
+  font-size: x-small;
+  padding-left: 6px;
+  padding-right: 6px;
+  overflow: hidden;
+}
+
+.playlist-item.selected #remove-button {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  width: 16px;
+  height: 16px;
+}
+
+#details-container {
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 0 6px;
+  border: 1px dashed var(--darkgray);
+}
+
+.details-item {
+  font-size: small;
+  min-height: 1.2rem;
+}
+
+.details-item.empty::before {
+  content: "empty placeholder";
+  color: var(--darkgray);
+  font-style: italic;
+}

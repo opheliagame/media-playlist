@@ -1,0 +1,188 @@
+.darkmode {
+  width: 20px;
+  height: 20px;
+  margin: 0 10px;
+  position: relative;
+}
+
+.darkmode > .toggle {
+  box-sizing: border-box;
+  display: none;
+}
+
+.darkmode svg {
+  cursor: pointer;
+  opacity: 0;
+  fill: var(--darkgray);
+  width: 20px;
+  height: 20px;
+  transition: opacity 0.1s;
+  position: absolute;
+  top: calc(50% - 10px);
+}
+
+:root[saved-theme="dark"] .toggle ~ label > #dayIcon {
+  opacity: 0;
+}
+
+:root[saved-theme="dark"] .toggle ~ label > #nightIcon,
+:root .toggle ~ label > #dayIcon {
+  opacity: 1;
+}
+
+:root .toggle ~ label > #nightIcon {
+  opacity: 0;
+}
+
+:root[saved-theme="dark"] {
+  --lightningcss-light: ;
+  --lightningcss-dark: initial;
+  color-scheme: dark;
+}
+
+:root[saved-theme="light"] {
+  --lightningcss-light: initial;
+  --lightningcss-dark: ;
+  color-scheme: light;
+}
+
+/*  ["#6495ed", "#ff4500", "#00fa9a", "#ffcc00", "#ff69b4"], */
+:root[saved-theme="light"] {
+  --light: #ebfff0; /* Airy mint background */
+  --lightgray: #c5ffdb; /* Soft lime */
+  --gray: #74e291; /* Vibrant green */
+  --darkgray: #2d9d5c; /* Medium emerald */
+  --dark: #174029; /* Deep forest */
+  --secondary: #ff1493; /* Deep pink */
+  --tertiary: #d373ff; /* Bright magenta-purple */
+  --highlight: rgba(255, 20, 147, 0.15);
+}
+
+:root {
+  --cornflowerblue: #6495ed;
+  --orangered: #ff4500;
+  --mediumspringgreen: #00fa9a;
+  --gold: #ffcc00;
+  --hotpink: #ff69b4;
+}
+
+:root[saved-theme="dark"] {
+  --light: #0c2614; /* Rich dark green */
+  --lightgray: #1a4027; /* Dark emerald */
+  --gray: #35964b; /* Medium green */
+  --darkgray: #84ffa8; /* Bright mint */
+  --dark: #ddffea; /* Pale mint */
+  --secondary: #ff47b6; /* Electric pink */
+  --tertiary: #b73fff; /* Vivid magenta */
+  --highlight: rgba(255, 71, 182, 0.15);
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: var(--gray);
+}
+
+body {
+  background-color: var(--light);
+  color: var(--darkgray);
+}
+
+::selection {
+  /* background-color: color-mix(
+    in srgb,
+    var(--tertiary) 20%,
+    rgba(255, 255, 255, 0)
+  ); */
+  /* background-color: var(--highlight); */
+  background-color: color-mix(in srgb, var(--tertiary), transparent 60%);
+  color: var(--darkgray);
+}
+
+p,
+ul,
+text,
+a,
+tr,
+td,
+li,
+ol,
+ul,
+.katex,
+.math {
+  color: var(--darkgray);
+  fill: var(--darkgray);
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+a {
+  color: var(--secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--tertiary);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+thead {
+  color: var(--dark);
+}
+
+svg {
+  fill: var(--darkgray);
+}
+
+/* Class specific styles */
+#title-animation-container .letter {
+  color: white;
+}
+
+.playlist-item {
+  background-color: var(--light);
+  border: 2px dashed var(--highlight);
+}
+
+.playlist-item.selected {
+  background-color: var(--highlight);
+  border: 2px dashed var(--darkgray);
+}
+
+.playlist-item.playing {
+  background-color: var(--highlight);
+}
+
+.playlist-item[data-media-type="text"] {
+  border: 2px dashed var(--gold);
+}
+
+.playlist-item[data-media-type="image"] {
+  border: 2px dashed var(--hotpink);
+}
+
+#details-container[data-media-type="text"] {
+  background-color: color-mix(in srgb, var(--gold), transparent 80%);
+}
+
+#details-container[data-media-type="image"] {
+  background-color: color-mix(in srgb, var(--hotpink), transparent 80%);
+}
+
+[contenteditable]:focus {
+  outline: 0px solid transparent;
+}
+
+[contenteditable="true"] {
+  caret-color: var(--tertiary);
+}
