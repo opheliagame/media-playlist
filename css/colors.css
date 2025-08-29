@@ -186,3 +186,8 @@ svg {
 [contenteditable="true"] {
   caret-color: var(--tertiary);
 }
+
+#connections-list-container {
+  background-color: var(--lightgray);
+  border: 1px dashed var(--darkgray);
+}

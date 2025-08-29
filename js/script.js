@@ -15,7 +15,7 @@ function handlePasteEvent(event) {
         };
 
         // text content needs to be processed inside callback
-        window.addMediaToDatabase(mediaItem, (id) => {
+        window.addPlaylistMedia(mediaItem, (id) => {
           addPlaylistItemContent(mediaItem, id);
           setPlayerContent(mediaItem);
         });
@@ -34,7 +34,7 @@ function handlePasteEvent(event) {
     }
 
     if (mediaItem != null) {
-      window.addMediaToDatabase(mediaItem, (id) => {
+      window.addPlaylistMedia(mediaItem, (id) => {
         addPlaylistItemContent(mediaItem, id);
         setPlayerContent(mediaItem);
       });
@@ -59,7 +59,7 @@ function handleDropEvent(event) {
     }
 
     if (mediaItem != null) {
-      window.addMediaToDatabase(mediaItem, (id) => {
+      window.addPlaylistMedia(mediaItem, (id) => {
         addPlaylistItemContent(mediaItem, id);
         setPlayerContent(mediaItem);
       });
@@ -89,7 +89,7 @@ addEmptyTextItemButton.addEventListener("click", () => {
     type: "text",
     content: "",
   };
-  window.addMediaToDatabase(mediaItem, (id) => {
+  window.addPlaylistMedia(mediaItem, (id) => {
     addPlaylistItemContent(mediaItem, id);
     setPlayerContent(mediaItem);
     const playlistItem = document.querySelector(
@@ -135,7 +135,7 @@ const sortable = Sortable.create(playlistContentsElement, {
     const itemElement = event.item;
     const id = itemElement.dataset.mediaKey;
 
-    window.addMediaToPlaylistAtIndex(
+    window.addPlaylistMediaAtIndex(
       parseInt(id),
       event.newIndex,
       event.oldIndex
@@ -182,7 +182,7 @@ function addPlaylistItemContent(mediaItem, id) {
 
   removeButton.addEventListener("click", (event) => {
     event.stopPropagation();
-    window.removeMediaFromDatabase(outerDivElement.dataset.mediaKey);
+    window.deletePlaylistMedia(outerDivElement.dataset.mediaKey);
     window.reloadContent();
   });
 
@@ -269,7 +269,7 @@ function setDetailsItemContent(mediaItem, id) {
         type: "text",
         content: newContent,
       };
-      window.updateMediaInDatabase(
+      window.updatePlaylistMedia(
         outerDivElement.dataset.mediaKey,
         newMediaItem
       );
@@ -337,7 +337,7 @@ function playMedia() {
 
   window.getPlayerOrder((playerOrder) => {
     window.playerOrder = playerOrder;
-    window.getMediaFromPlaylistStore((mediaItems) => {
+    window.getPlaylist((mediaItems) => {
       window.playlistData = mediaItems;
       const playlistStore = window.playlistData;
 
@@ -419,3 +419,72 @@ playerPlayButton.addEventListener("click", () => {
 playerResetButton.addEventListener("click", () => {
   resetMedia();
 });
+
+// connections functionality
+const connectionsListContainer = document.getElementById(
+  "connections-list-container"
+);
+const connectionsListContainerHideButton = document.getElementById(
+  "connections-list-container-hide-button"
+);
+
+const connectionNameInput = document.getElementById("connection-name-input");
+const connectionsListElement = document.getElementById("connections-list");
+const loadConnectionsButton = document.getElementById(
+  "load-connections-button"
+);
+const saveConnectionButton = document.getElementById("save-connection-button");
+const deleteConnectionButton = document.getElementById(
+  "delete-connection-button"
+);
+
+loadConnectionsButton.addEventListener("click", () => {
+  window.getConnections((connections) => {
+    connectionsListContainer.classList.add("visible");
+
+    connectionsListElement.innerHTML = ""; // Clear previous connections
+    connections.forEach((connection) => {
+      const connectionItem = document.createElement("li");
+      connectionItem.textContent = connection.name;
+      connectionItem.dataset.connectionKey = connection.id;
+
+      connectionItem.addEventListener("click", () => {
+        window.getConnection(connection.id, (connection) => {
+          connectionsListContainer.classList.remove("visible");
+          window.reloadContent();
+        });
+      });
+
+      connectionsListElement.appendChild(connectionItem);
+    });
+
+    const newConnectionItem = document.createElement("li");
+    newConnectionItem.textContent = "Add New Connection";
+    newConnectionItem.addEventListener("click", () => {
+      window.loadEmptyConnection(() => {
+        connectionsListContainer.classList.remove("visible");
+        window.reloadContent();
+      });
+    });
+    connectionsListElement.appendChild(newConnectionItem);
+  });
+});
+
+connectionsListContainerHideButton.addEventListener("click", () => {
+  connectionsListContainer.classList.remove("visible");
+});
+
+saveConnectionButton.addEventListener("click", () => {
+  const connectionName = connectionNameInput.textContent.trim();
+  window.saveConnection(connectionName, (connectionKey) => {
+    console.log("Connection saved with key:", connectionKey);
+  });
+});
+
+deleteConnectionButton.addEventListener("click", () => {
+  window.deleteCurrentConnection();
+});
+
+function setConnectionContent(connectionName) {
+  connectionNameInput.textContent = connectionName || "connection name here";
+}

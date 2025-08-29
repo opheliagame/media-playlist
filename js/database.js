@@ -1,5 +1,173 @@
 // indexedDB functionality
-function getMediaFromPlaylistStore(onload) {
+function getConnections(onload) {
+  db.transaction("connections").objectStore("connections").getAll().onsuccess =
+    (event) => {
+      console.log("All connections:", event.target.result);
+      onload(event.target.result);
+    };
+}
+
+function getConnection(connectionKey, onload) {
+  _getConnectionTrn(connectionKey, (connection) => {
+    _setPlaylist(connection.mediaItems);
+    _setPlayerOrder(connection.playerOrder);
+    saveWorkspaceConnectionKey(connectionKey);
+    saveWorkspaceConnectionName(connection.name);
+
+    onload?.(connection);
+  });
+}
+
+function loadEmptyConnection(onload) {
+  _setPlaylist([]);
+  _setPlayerOrder([]);
+  resetWorkspaceConnectionKey();
+  resetWorkspaceConnectionName();
+  onload?.();
+}
+
+function _getConnectionTrn(connectionKey, onload) {
+  db
+    .transaction(["connections"])
+    .objectStore("connections")
+    .get(connectionKey).onsuccess = (event) => {
+    const connection = event.target.result;
+    onload(connection);
+  };
+}
+
+function _setPlayerOrder(playerOrder) {
+  db.transaction(["player"], "readwrite")
+    .objectStore("player")
+    .put(playerOrder, "player-order");
+}
+
+function _setPlaylist(mediaItems) {
+  const transaction = db.transaction(["playlist"], "readwrite");
+  const objectStore = transaction.objectStore("playlist");
+
+  // Clear existing items
+  objectStore.clear();
+
+  mediaItems.forEach((mediaItem) => {
+    const request = objectStore.add(mediaItem);
+    request.onsuccess = (event) => {
+      console.log("Media item added:", event.target.result);
+    };
+  });
+}
+
+function saveConnection(name, oncomplete) {
+  getPlaylist((mediaItems) => {
+    getPlayerOrder((playerOrder) => {
+      const connection = {
+        name: name,
+        mediaItems: mediaItems,
+        playerOrder: playerOrder,
+      };
+
+      getWorkspaceConnectionKey((connectionKey) => {
+        _saveConnectionTrn(connection, connectionKey, (connectionKey) => {
+          saveWorkspaceConnectionKey(connectionKey);
+          saveWorkspaceConnectionName(name);
+          oncomplete?.(connectionKey);
+        });
+      });
+    });
+  });
+}
+
+function _saveConnectionTrn(connection, connectionKey, oncomplete) {
+  const transaction = db.transaction(["connections"], "readwrite");
+  const objectStore = transaction.objectStore("connections");
+
+  let request;
+  if (connectionKey != null) {
+    connection.id = parseInt(connectionKey);
+    console.log("Updating connection with key:", connectionKey);
+    request = objectStore.put(connection);
+  } else {
+    request = objectStore.add(connection);
+  }
+
+  request.onsuccess = (event) => {
+    const itemKey = event.target.result;
+    oncomplete?.(itemKey);
+  };
+}
+
+function deleteCurrentConnection() {
+  getWorkspaceConnectionKey((currentConnectionKey) => {
+    _deleteConnectionTrn(currentConnectionKey, (deletedKey) => {
+      console.log("Deleted connection with key:", deletedKey);
+    });
+    loadEmptyConnection();
+    reloadContent();
+  });
+}
+
+function _deleteConnectionTrn(connectionKey, oncomplete) {
+  const transaction = db.transaction(["connections"], "readwrite");
+  const objectStore = transaction.objectStore("connections");
+  const request = objectStore.delete(connectionKey);
+
+  request.onsuccess = (event) => {
+    console.log("Connection deleted:", event.target.result);
+    oncomplete?.(connectionKey);
+  };
+}
+
+function getWorkspaceConnectionKey(onload) {
+  db
+    .transaction(["workspace"])
+    .objectStore("workspace")
+    .get("connection-key").onsuccess = (event) => {
+    const connectionKey = event.target.result;
+    onload(connectionKey);
+  };
+}
+
+function saveWorkspaceConnectionKey(connectionKey) {
+  const transaction = db.transaction(["workspace"], "readwrite");
+  const objectStore = transaction.objectStore("workspace");
+  const request = objectStore.put(connectionKey, "connection-key");
+  request.onsuccess = (event) => {
+    console.log("Workspace connection key saved:", event.target.result);
+  };
+}
+
+function resetWorkspaceConnectionKey() {
+  db.transaction(["workspace"], "readwrite")
+    .objectStore("workspace")
+    .delete("connection-key");
+}
+
+function getWorkspaceConnectionName(onload) {
+  db
+    .transaction(["workspace"])
+    .objectStore("workspace")
+    .get("connection-name").onsuccess = (event) => {
+    const connectionName = event.target.result || {};
+    onload(connectionName);
+  };
+}
+
+function saveWorkspaceConnectionName(name) {
+  const transaction = db.transaction(["workspace"], "readwrite");
+  const objectStore = transaction.objectStore("workspace");
+  const request = objectStore.put(name, "connection-name");
+  request.onsuccess = (event) => {
+    console.log("Workspace connection name saved:", event.target.result);
+  };
+}
+
+function resetWorkspaceConnectionName() {
+  db.transaction(["workspace"], "readwrite")
+    .objectStore("workspace")
+    .put("New Connection", "connection-name");
+}
+
+function getPlaylist(onload) {
   db.transaction("playlist").objectStore("playlist").getAll().onsuccess = (
     event
   ) => {
@@ -8,14 +176,14 @@ function getMediaFromPlaylistStore(onload) {
   };
 }
 
-function addMediaToDatabase(mediaItem, oncomplete) {
-  _addMediaToPlaylistStore(mediaItem, (mediaKey) => {
-    _addMediaToPlaylistEnd(mediaKey);
+function addPlaylistMedia(mediaItem, oncomplete) {
+  _addPlaylistMediaTrn(mediaItem, (mediaKey) => {
+    _addPlayerOrderTrn(mediaKey);
     oncomplete?.(mediaKey);
   });
 }
 
-function updateMediaInDatabase(mediaKey, mediaItem) {
+function updatePlaylistMedia(mediaKey, mediaItem) {
   const id = parseInt(mediaKey);
   const transaction = db.transaction(["playlist"], "readwrite");
   const objectStore = transaction.objectStore("playlist");
@@ -32,18 +200,6 @@ function updateMediaInDatabase(mediaKey, mediaItem) {
   };
 }
 
-function _addMediaToPlaylistStore(mediaItem, oncomplete) {
-  const transaction = db.transaction(["playlist"], "readwrite");
-  transaction.oncomplete = () => {};
-
-  const objectStore = transaction.objectStore("playlist");
-  const request = objectStore.add(mediaItem);
-  request.onsuccess = (event) => {
-    const itemKey = event.target.result;
-    oncomplete?.(itemKey);
-  };
-}
-
 function getPlayerOrder(onload) {
   const objectStore = db.transaction(["player"]).objectStore("player");
   const request = objectStore.get("player-order");
@@ -53,25 +209,7 @@ function getPlayerOrder(onload) {
   };
 }
 
-function _addMediaToPlaylistEnd(mediaKey) {
-  const objectStore = db
-    .transaction(["player"], "readwrite")
-    .objectStore("player");
-  const request = objectStore.get("player-order");
-
-  request.onsuccess = (event) => {
-    const playerOrder = event.target.result;
-
-    if (!playerOrder) {
-      objectStore.add([mediaKey], "player-order");
-    } else {
-      playerOrder.push(mediaKey);
-      objectStore.put(playerOrder, "player-order");
-    }
-  };
-}
-
-function addMediaToPlaylistAtIndex(mediaKey, newIndex, oldIndex) {
+function addPlaylistMediaAtIndex(mediaKey, newIndex, oldIndex) {
   const objectStore = db
     .transaction(["player"], "readwrite")
     .objectStore("player");
@@ -86,7 +224,7 @@ function addMediaToPlaylistAtIndex(mediaKey, newIndex, oldIndex) {
   };
 }
 
-function removeMediaFromDatabase(mediaKey) {
+function deletePlaylistMedia(mediaKey) {
   const id = parseInt(mediaKey);
 
   const transaction = db.transaction(["playlist", "player"], "readwrite");
@@ -104,7 +242,38 @@ function removeMediaFromDatabase(mediaKey) {
   };
 }
 
+function _addPlaylistMediaTrn(mediaItem, oncomplete) {
+  const transaction = db.transaction(["playlist"], "readwrite");
+  transaction.oncomplete = () => {};
+
+  const objectStore = transaction.objectStore("playlist");
+  const request = objectStore.add(mediaItem);
+  request.onsuccess = (event) => {
+    const itemKey = event.target.result;
+    oncomplete?.(itemKey);
+  };
+}
+
+function _addPlayerOrderTrn(mediaKey) {
+  const objectStore = db
+    .transaction(["player"], "readwrite")
+    .objectStore("player");
+  const request = objectStore.get("player-order");
+
+  request.onsuccess = (event) => {
+    const playerOrder = event.target.result;
+
+    if (!playerOrder) {
+      objectStore.add([mediaKey], "player-order");
+    } else {
+      playerOrder.push(mediaKey);
+      objectStore.put(playerOrder, "player-order");
+    }
+  };
+}
+
 // SCHEMA, version 1
+// db playlist
 // [
 //   { type: "text", content: "some text" },
 //   { type: "image", content: objectURL },
@@ -114,10 +283,16 @@ function reloadContent() {
   getPlayerOrder((playerOrder) => {
     window.playerOrder = playerOrder;
   });
-  getMediaFromPlaylistStore((mediaItems) => {
+  getPlaylist((mediaItems) => {
     window.showPlaylistContents(mediaItems);
     window.setPlayerContent(mediaItems[0] || {});
     window.playlistData = mediaItems;
+  });
+  getConnections((connections) => {
+    // window.showConnections(connections);
+  });
+  getWorkspaceConnectionName((connectionName) => {
+    window.setConnectionContent(connectionName);
   });
 }
 
@@ -130,11 +305,16 @@ request.onerror = (event) => {
 request.onupgradeneeded = (event) => {
   db = event.target.result;
 
+  db.createObjectStore("connections", {
+    autoIncrement: true,
+    keyPath: "id",
+  });
   db.createObjectStore("playlist", {
     autoIncrement: true,
     keyPath: "id",
   });
   db.createObjectStore("player");
+  db.createObjectStore("workspace");
 };
 
 request.onsuccess = (event) => {
@@ -150,9 +330,13 @@ request.onsuccess = (event) => {
   console.log("Playlist data initialized:", window.playlistData);
   console.log("Player order initialized:", window.playerOrder);
   window.reloadContent = reloadContent;
-  window.getMediaFromPlaylistStore = getMediaFromPlaylistStore;
-  window.addMediaToDatabase = addMediaToDatabase;
-  window.addMediaToPlaylistAtIndex = addMediaToPlaylistAtIndex;
-  window.updateMediaInDatabase = updateMediaInDatabase;
-  window.removeMediaFromDatabase = removeMediaFromDatabase;
+  window.getConnection = getConnection;
+  window.loadEmptyConnection = loadEmptyConnection;
+  window.saveConnection = saveConnection;
+  window.deleteCurrentConnection = deleteCurrentConnection;
+  window.getPlaylist = getPlaylist;
+  window.addPlaylistMedia = addPlaylistMedia;
+  window.addPlaylistMediaAtIndex = addPlaylistMediaAtIndex;
+  window.updatePlaylistMedia = updatePlaylistMedia;
+  window.deletePlaylistMedia = deletePlaylistMedia;
 };
