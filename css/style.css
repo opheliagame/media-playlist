@@ -39,21 +39,30 @@ button {
   cursor: pointer;
 }
 
-nav {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 24px 10px 0px 10px;
-  margin: 0px;
+#horizontal-nav {
+  display: none;
 }
 
-#title-link-heading {
+#vertical-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 24px 10px 0px 10px;
+  margin: 0px;
+  gap: 10px;
+}
+
+#mobile-nav-inner-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.title-link-heading {
   padding: 0px 6px;
   text-transform: lowercase;
 }
 
-#title-animation-container {
+.title-animation-container {
   padding: 6px 6px 6px 6px;
   display: flex;
   flex-direction: row;
@@ -61,7 +70,7 @@ nav {
   justify-content: center;
 }
 
-#title-animation-container .letter {
+.title-animation-container .letter {
   font-size: xx-large;
   position: relative;
   width: 32px;
@@ -75,12 +84,12 @@ nav {
   justify-content: center;
 }
 
-#title-animation-container .letter.animate {
+.title-animation-container .letter.animate {
   animation: stretch 1s ease-in-out infinite;
   animation-fill-mode: both;
 }
 
-#title-animation-container .letter .letter-background {
+.title-animation-container .letter .letter-background {
   position: absolute;
   top: 0;
   left: 0;
@@ -117,15 +126,16 @@ nav {
   flex: 1;
   overflow-y: hidden;
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: 1fr 2fr 1fr;
   gap: 0.5rem;
   padding: 1rem;
 }
 
 #media-input {
   border: 1px dashed var(--darkgray);
-  height: 100%;
-  overflow-y: auto;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 #media-input:hover {
@@ -211,15 +221,15 @@ img {
 }
 
 #playlist-contents-container {
-  overflow-y: auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  overflow-x: auto;
+  display: flex;
+  flex-direction: row;
   gap: 0.5rem;
 }
 
 .playlist-item {
   cursor: pointer;
-  height: 6rem;
+  min-width: 6rem;
   overflow: hidden;
   position: relative;
 }

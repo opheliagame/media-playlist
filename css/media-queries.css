@@ -1,0 +1,55 @@
+@media only screen and (min-width: 760px) {
+  nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 10px 0px 10px;
+    margin: 0px;
+  }
+
+  #connections-container {
+    display: flex;
+    align-items: center;
+  }
+
+  #vertical-nav {
+    display: none;
+  }
+
+  #horizontal-nav {
+    display: flex;
+    flex-direction: row;
+    padding: 24px 10px 0px 10px;
+    margin: 0px;
+  }
+
+  #main-container {
+    flex: 1;
+    overflow-y: hidden;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 0.5rem;
+    padding: 1rem;
+  }
+
+  #media-input {
+    border: 1px dashed var(--darkgray);
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  #playlist-contents-container {
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.5rem;
+  }
+
+  .playlist-item {
+    cursor: pointer;
+    height: 6rem;
+    overflow: hidden;
+    position: relative;
+  }
+}

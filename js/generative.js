@@ -10,8 +10,8 @@ function showTitleAnimation() {
     "#ffcc00",
     "#ff69b4",
   ];
-  const titleAnimationContainer = document.getElementById(
-    "title-animation-container"
+  const titleAnimationContainer = document.querySelector(
+    ".title-animation-container"
   );
 
   let animationDelay = 0;
@@ -47,7 +47,7 @@ function showTitleAnimation() {
     });
   }
 
-  const titleLinkHeading = document.getElementById("title-link-heading");
+  const titleLinkHeading = document.querySelector(".title-link-heading");
   titleLinkHeading.style.display = "none";
 }
 
