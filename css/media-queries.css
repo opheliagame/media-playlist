@@ -1,4 +1,13 @@
 @media only screen and (min-width: 760px) {
+  html {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  body {
+    max-height: 100%;
+  }
+
   nav {
     display: flex;
     flex-direction: row;
@@ -37,6 +46,16 @@
     border: 1px dashed var(--darkgray);
     height: 100%;
     overflow-y: auto;
+  }
+
+  #player-container {
+    aspect-ratio: 16/9;
+    z-index: 0;
+    position: relative;
+  }
+
+  #player-contents-container {
+    aspect-ratio: 16/9;
   }
 
   #playlist-contents-container {
