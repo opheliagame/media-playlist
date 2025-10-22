@@ -1,3 +1,9 @@
+import {
+  setConnectionContent,
+  setPlayerContent,
+  showPlaylistContents,
+} from "./script.js";
+
 // indexedDB functionality
 function getConnections(onload) {
   db.transaction("connections").objectStore("connections").getAll().onsuccess =
@@ -284,15 +290,15 @@ function reloadContent() {
     window.playerOrder = playerOrder;
   });
   getPlaylist((mediaItems) => {
-    window.showPlaylistContents(mediaItems);
-    window.setPlayerContent(mediaItems[0] || {});
+    showPlaylistContents(mediaItems);
+    setPlayerContent(mediaItems[0] || {});
     window.playlistData = mediaItems;
   });
   getConnections((connections) => {
-    // window.showConnections(connections);
+    // showConnections(connections);
   });
   getWorkspaceConnectionName((connectionName) => {
-    window.setConnectionContent(connectionName);
+    setConnectionContent(connectionName);
   });
 }
 
@@ -324,19 +330,24 @@ request.onsuccess = (event) => {
     // requests!
     console.error(`Database error: ${event.target.error?.message}`);
   };
-  window.db = db; // Expose db to the global scope
 
   reloadContent();
   console.log("Playlist data initialized:", window.playlistData);
   console.log("Player order initialized:", window.playerOrder);
-  window.reloadContent = reloadContent;
-  window.getConnection = getConnection;
-  window.loadEmptyConnection = loadEmptyConnection;
-  window.saveConnection = saveConnection;
-  window.deleteCurrentConnection = deleteCurrentConnection;
-  window.getPlaylist = getPlaylist;
-  window.addPlaylistMedia = addPlaylistMedia;
-  window.addPlaylistMediaAtIndex = addPlaylistMediaAtIndex;
-  window.updatePlaylistMedia = updatePlaylistMedia;
-  window.deletePlaylistMedia = deletePlaylistMedia;
+};
+
+export {
+  db,
+  reloadContent,
+  getConnections,
+  getConnection,
+  loadEmptyConnection,
+  saveConnection,
+  deleteCurrentConnection,
+  getPlaylist,
+  addPlaylistMedia,
+  addPlaylistMediaAtIndex,
+  updatePlaylistMedia,
+  deletePlaylistMedia,
+  getPlayerOrder,
 };

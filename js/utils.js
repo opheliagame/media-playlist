@@ -1,3 +1,5 @@
+import { addPlaylistMediaAtIndex } from "./database.js";
+
 // https://daviddalbusco.com/blog/essential-javascript-functions-for-detecting-users-device-characteristics/
 const isMobile = () => {
   const isTouchScreen = window.matchMedia("(any-pointer:coarse)").matches;
@@ -7,7 +9,7 @@ const isMobile = () => {
 };
 
 // sorting functionality
-const playlistContentsElement = document.getElementById(
+let playlistContentsElement = document.getElementById(
   "playlist-contents-container"
 );
 
@@ -15,7 +17,7 @@ const sortableOnEnd = (event) => {
   const itemElement = event.item;
   const id = itemElement.dataset.mediaKey;
 
-  window.addPlaylistMediaAtIndex(parseInt(id), event.newIndex, event.oldIndex);
+  addPlaylistMediaAtIndex(parseInt(id), event.newIndex, event.oldIndex);
 };
 
 const sortable = isMobile()
@@ -28,3 +30,5 @@ const sortable = isMobile()
       animation: 150,
       onEnd: sortableOnEnd,
     });
+
+export { isMobile };
