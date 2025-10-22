@@ -134,6 +134,7 @@ button {
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
+  padding: 6px;
 }
 
 #media-input:hover {
@@ -228,6 +229,11 @@ img {
 .playlist-item {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-right: 6px;
+  padding-left: 2px;
 
   cursor: pointer;
   min-width: 6rem;

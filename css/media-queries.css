@@ -38,11 +38,14 @@
     overflow-y: hidden;
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
+    grid-template-areas: none;
+    grid-template-rows: none;
     gap: 0.5rem;
     padding: 1rem;
   }
 
   #media-input {
+    grid-area: auto;
     border: 1px dashed var(--darkgray);
     height: 100%;
     overflow-y: auto;

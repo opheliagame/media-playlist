@@ -125,14 +125,6 @@ function _createDOMFromDatabaseItem(mediaItem, id) {
   outerDivElement.dataset.mediaType = mediaItem.type;
   outerDivElement.appendChild(innerElement);
 
-  // add drag handle
-  let dragHandleElement = document
-    .getElementById("sample-grip-vertical-button")
-    .cloneNode();
-  dragHandleElement.removeAttribute("id");
-  dragHandleElement.classList.add("drag-handle");
-  outerDivElement.insertBefore(innerElement, innerElement);
-
   return outerDivElement;
 }
 
@@ -183,6 +175,14 @@ function addPlaylistItemContent(mediaItem, id) {
     db.deletePlaylistMedia(outerDivElement.dataset.mediaKey);
     db.reloadContent();
   });
+
+  // add drag handle
+  let dragHandleElement = document
+    .getElementById("sample-grip-vertical-button")
+    .cloneNode(true);
+  dragHandleElement.removeAttribute("id");
+  dragHandleElement.classList.add("drag-handle");
+  outerDivElement.insertBefore(dragHandleElement, outerDivElement.firstChild);
 
   playlistContentsElement.appendChild(outerDivElement);
   scrollToPlaylistItem(outerDivElement.dataset.mediaKey);
