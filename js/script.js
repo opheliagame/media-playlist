@@ -362,7 +362,9 @@ function playMedia() {
         );
         if (currentPlaylistItem) {
           unmarkAllPlaylistItems();
-          scrollToPlaylistItem(currentMediaItemKey);
+          if (!isMobile()) {
+            scrollToPlaylistItem(currentMediaItemKey);
+          }
           currentPlaylistItem.classList.add("playing");
         }
       }, 1000);
