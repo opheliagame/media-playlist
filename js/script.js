@@ -122,6 +122,14 @@ function _createDOMFromDatabaseItem(mediaItem, id) {
   outerDivElement.dataset.mediaType = mediaItem.type;
   outerDivElement.appendChild(innerElement);
 
+  // add drag handle
+  let dragHandleElement = document
+    .getElementById("sample-grip-vertical-button")
+    .cloneNode();
+  dragHandleElement.removeAttribute("id");
+  dragHandleElement.classList.add("drag-handle");
+  dragHandleElement.insertBefore(innerElement, outerDivElement);
+
   return outerDivElement;
 }
 
@@ -129,19 +137,6 @@ function _createDOMFromDatabaseItem(mediaItem, id) {
 const playlistContentsElement = document.getElementById(
   "playlist-contents-container"
 );
-const sortable = Sortable.create(playlistContentsElement, {
-  animation: 150,
-  onEnd: (event) => {
-    const itemElement = event.item;
-    const id = itemElement.dataset.mediaKey;
-
-    window.addPlaylistMediaAtIndex(
-      parseInt(id),
-      event.newIndex,
-      event.oldIndex
-    );
-  },
-});
 
 function showPlaylistContents(mediaItems) {
   // clear the playlist contents container

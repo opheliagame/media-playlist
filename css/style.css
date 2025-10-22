@@ -226,10 +226,19 @@ img {
 }
 
 .playlist-item {
+  display: flex;
+  flex-direction: row;
+
   cursor: pointer;
   min-width: 6rem;
   overflow: hidden;
   position: relative;
+}
+
+.playlist-item .drag-handle {
+  padding-right: 4px;
+  width: 16px;
+  height: 16px;
 }
 
 .playlist-item p {
