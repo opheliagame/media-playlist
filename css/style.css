@@ -269,13 +269,13 @@ img {
 
 .details-item {
   flex: 1;
-  font-size: small;
   min-height: 1.2rem;
   hyphens: none;
 }
 
 .details-item p {
   hyphens: none;
+  font-size: medium;
 }
 
 .details-item.empty::before {
