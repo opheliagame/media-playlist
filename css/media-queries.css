@@ -74,8 +74,4 @@
     overflow: hidden;
     position: relative;
   }
-
-  .playlist-item .drag-handle {
-    display: none;
-  }
 }

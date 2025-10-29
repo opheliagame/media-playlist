@@ -241,10 +241,6 @@ img {
   position: relative;
 }
 
-.playlist-item .drag-handle {
-  display: none;
-}
-
 .playlist-item p {
   height: 100%;
   width: 100%;

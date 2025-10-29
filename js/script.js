@@ -176,14 +176,6 @@ function addPlaylistItemContent(mediaItem, id) {
     db.reloadContent();
   });
 
-  // add drag handle
-  let dragHandleElement = document
-    .getElementById("sample-grip-vertical-button")
-    .cloneNode(true);
-  dragHandleElement.removeAttribute("id");
-  dragHandleElement.classList.add("drag-handle");
-  outerDivElement.insertBefore(dragHandleElement, outerDivElement.firstChild);
-
   playlistContentsElement.appendChild(outerDivElement);
   scrollToPlaylistItem(outerDivElement.dataset.mediaKey);
 }
