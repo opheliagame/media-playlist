@@ -22,7 +22,7 @@ const sortableOnEnd = (event) => {
 
 const sortable = isMobile()
   ? Sortable.create(playlistContentsElement, {
-      handle: ".drag-handle",
+      handle: ".playlist-item",
       animation: 150,
       onEnd: sortableOnEnd,
     })

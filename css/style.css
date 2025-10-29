@@ -242,9 +242,7 @@ img {
 }
 
 .playlist-item .drag-handle {
-  padding-right: 4px;
-  width: 16px;
-  height: 16px;
+  display: none;
 }
 
 .playlist-item p {
