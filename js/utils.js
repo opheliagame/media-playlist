@@ -37,15 +37,11 @@ const sortableOnEnd = (event) => {
   addPlaylistMediaAtIndex(parseInt(id), event.newIndex, event.oldIndex);
 };
 
-const sortable = isMobile()
-  ? Sortable.create(playlistContentsElement, {
-      handle: ".playlist-item",
-      animation: 150,
-      onEnd: sortableOnEnd,
-    })
-  : Sortable.create(playlistContentsElement, {
-      animation: 150,
-      onEnd: sortableOnEnd,
-    });
+const sortable = Sortable.create(playlistContentsElement, {
+  delay: 80,
+  delayOnTouchOnly: true,
+  animation: 150,
+  onEnd: sortableOnEnd,
+});
 
 export { isMobile, addContentsToSelection, onClickEditableElement };
