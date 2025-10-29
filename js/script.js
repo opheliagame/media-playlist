@@ -156,7 +156,9 @@ function addPlaylistItemContent(mediaItem, id) {
   // item onclick event
   outerDivElement.addEventListener("click", (event) => {
     stopMedia();
-    scrollToPlaylistItem(outerDivElement.dataset.mediaKey);
+    if (!isMobile()) {
+      scrollToPlaylistItem(outerDivElement.dataset.mediaKey);
+    }
     setPlayerContent(mediaItem);
     setDetailsItemContent(mediaItem, id);
     unselectAllPlaylistItems();
@@ -177,7 +179,9 @@ function addPlaylistItemContent(mediaItem, id) {
   });
 
   playlistContentsElement.appendChild(outerDivElement);
-  scrollToPlaylistItem(outerDivElement.dataset.mediaKey);
+  if (!isMobile()) {
+    scrollToPlaylistItem(outerDivElement.dataset.mediaKey);
+  }
 }
 
 function scrollToPlaylistItem(id) {
