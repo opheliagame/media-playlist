@@ -182,6 +182,15 @@ function getPlaylist(onload) {
   };
 }
 
+function getPlaylistMedia(mediaKey, onload) {
+  const id = parseInt(mediaKey);
+  db.transaction("playlist").objectStore("playlist").get(id).onsuccess = (
+    event
+  ) => {
+    onload(event.target.result);
+  };
+}
+
 function addPlaylistMedia(mediaItem, oncomplete) {
   _addPlaylistMediaTrn(mediaItem, (mediaKey) => {
     _addPlayerOrderTrn(mediaKey);
@@ -345,6 +354,7 @@ export {
   saveConnection,
   deleteCurrentConnection,
   getPlaylist,
+  getPlaylistMedia,
   addPlaylistMedia,
   addPlaylistMediaAtIndex,
   updatePlaylistMedia,

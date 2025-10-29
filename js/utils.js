@@ -8,6 +8,23 @@ const isMobile = () => {
   return isTouchScreen && !isMouseScreen;
 };
 
+const addContentsToSelection = (contents) => {
+  const selection = window.getSelection();
+  const range = document.createRange();
+  selection.removeAllRanges();
+  range.selectNodeContents(contents);
+  range.collapse(false);
+  selection.addRange(range);
+};
+
+const onClickEditableElement = (event) => {
+  addContentsToSelection(event.target);
+
+  if (!isMobile()) {
+    event.target.focus();
+  }
+};
+
 // sorting functionality
 let playlistContentsElement = document.getElementById(
   "playlist-contents-container"
@@ -31,4 +48,4 @@ const sortable = isMobile()
       onEnd: sortableOnEnd,
     });
 
-export { isMobile };
+export { isMobile, addContentsToSelection, onClickEditableElement };

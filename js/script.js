@@ -1,4 +1,8 @@
-import { isMobile } from "./utils.js";
+import {
+  addContentsToSelection,
+  isMobile,
+  onClickEditableElement,
+} from "./utils.js";
 import * as db from "./database.js";
 
 // clipboard events
@@ -159,8 +163,12 @@ function addPlaylistItemContent(mediaItem, id) {
     if (!isMobile()) {
       scrollToPlaylistItem(outerDivElement.dataset.mediaKey);
     }
-    setPlayerContent(mediaItem);
-    setDetailsItemContent(mediaItem, id);
+
+    db.getPlaylistMedia(id, (currentMediaItem) => {
+      setPlayerContent(currentMediaItem);
+      setDetailsItemContent(currentMediaItem, id);
+    });
+
     unselectAllPlaylistItems();
     outerDivElement.classList.add("selected");
   });
@@ -232,6 +240,9 @@ function setDetailsItemContent(mediaItem, id) {
   outerDivElement.classList.add("details-item");
   detailsContainer.appendChild(outerDivElement);
 
+  // event listener for click
+  detailsContainer.addEventListener("click", onClickEditableElement);
+
   // event listener for input
   if (mediaItem.type === "text") {
     outerDivElement.contentEditable = true;
@@ -240,18 +251,11 @@ function setDetailsItemContent(mediaItem, id) {
     }
 
     if (!isMobile()) {
-      // focus contenteditable element and place cursor at the end
       if (mediaItem.content.length > 0) {
-        const selection = window.getSelection();
-        const range = document.createRange();
-        selection.removeAllRanges();
-        range.selectNodeContents(outerDivElement);
-        range.collapse(false);
-        selection.addRange(range);
-
+        addContentsToSelection(outerDivElement);
         outerDivElement.focus();
       } else {
-        outerDivElement.blur();
+        outerDivElement.focus();
       }
     }
 
