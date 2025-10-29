@@ -235,17 +235,20 @@ function setDetailsItemContent(mediaItem, id) {
       outerDivElement.classList.add("empty");
     }
 
-    // focus contenteditable element and place cursor at the end
-    if (mediaItem.content.length > 0) {
-      const selection = window.getSelection();
-      const range = document.createRange();
-      selection.removeAllRanges();
-      range.selectNodeContents(outerDivElement);
-      range.collapse(false);
-      selection.addRange(range);
-      outerDivElement.focus();
-    } else {
-      outerDivElement.focus();
+    if (!isMobile()) {
+      // focus contenteditable element and place cursor at the end
+      if (mediaItem.content.length > 0) {
+        const selection = window.getSelection();
+        const range = document.createRange();
+        selection.removeAllRanges();
+        range.selectNodeContents(outerDivElement);
+        range.collapse(false);
+        selection.addRange(range);
+
+        outerDivElement.focus();
+      } else {
+        outerDivElement.blur();
+      }
     }
 
     outerDivElement.addEventListener("input", (event) => {
