@@ -93,7 +93,14 @@ function playMedia() {
         }
 
         let progress =
-          (currentPlayerOrderIndex / window.playerOrder.length) * 100;
+          (currentPlayerOrderIndex /
+            (window.playerOrder.length > 1
+              ? window.playerOrder.length - 1
+              : 1)) *
+          100;
+        if (progress == 0) {
+          progress = 0.01;
+        }
         let progressElement = document.getElementById(
           "player-progress-element"
         );

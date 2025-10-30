@@ -187,10 +187,15 @@ button {
 }
 
 #player-progress-element {
-  color: var(--dark);
-  background-color: var(--dark);
+  color: var(--darkgray);
+  background-color: var(--darkgray);
   height: 4px;
-  width: 0%;
+  width: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  transition: width 1s ease-in;
 }
 
 #player-play-button {
