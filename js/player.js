@@ -150,6 +150,7 @@ playerContentsContainer.addEventListener("click", (event) => {
   if (manualMode) {
     playerPlayButton.style.display = "none";
     playerResetButton.style.display = "none";
+    stopMedia();
     stepMedia();
   } else {
     if (playSetIntervalId) {
@@ -163,6 +164,7 @@ playerPlayButton.addEventListener("click", () => {
   if (manualMode) {
     playerPlayButton.style.display = "none";
     playerResetButton.style.display = "none";
+    stopMedia();
     stepMedia();
   } else {
     if (playSetIntervalId) {
