@@ -4,6 +4,9 @@ import {
   isMobile,
   addContentsToSelection,
 } from "./utils.js";
+import * as db from "./database.js";
+import { updatePlayerTextContent } from "./player.js";
+import { updatePlaylistItemTextContent } from "./playlist.js";
 
 function setDetailsItemContent(mediaItem, id) {
   const detailsContainer = document.getElementById("details-container");
