@@ -1,0 +1,14 @@
+.title-animation-container .letter .letter-background svg {
+  filter: drop-shadow(5px 5px 5px rgba(100, 100, 111, 0.2));
+}
+
+#player-contents-container {
+  border: none;
+  border-radius: 12px;
+  background-color: rgb(255 255 255 / 65%);
+
+  border: solid 1px var(--highlight);
+
+  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; */
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}

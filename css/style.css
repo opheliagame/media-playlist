@@ -221,6 +221,7 @@ button {
 }
 
 #manual-mode-button {
+  margin-top: 16px;
   font-size: small;
   padding: 1rem;
   cursor: pointer;

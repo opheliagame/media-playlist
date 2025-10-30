@@ -89,6 +89,7 @@
 
 body {
   background-color: var(--light);
+  /* background-color: whitesmoke; */
   color: var(--darkgray);
 }
 
