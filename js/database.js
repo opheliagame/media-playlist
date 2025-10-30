@@ -1,8 +1,6 @@
-import {
-  setConnectionContent,
-  setPlayerContent,
-  showPlaylistContents,
-} from "./script.js";
+import { setConnectionContent } from "./connections.js";
+import { setPlayerContent } from "./player.js";
+import { showPlaylistContents } from "./playlist.js";
 
 // indexedDB functionality
 function getConnections(onload) {
