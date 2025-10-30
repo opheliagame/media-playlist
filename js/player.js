@@ -75,6 +75,7 @@ function playMedia() {
         currentPlayerOrderIndex =
           (currentPlayerOrderIndex + 1) % window.playerOrder.length;
         currentMediaItemKey = window.playerOrder[currentPlayerOrderIndex];
+
         const nextItem = playlistStore.find(
           (item) => item.id === currentMediaItemKey
         );
@@ -90,6 +91,13 @@ function playMedia() {
           }
           currentPlaylistItem.classList.add("playing");
         }
+
+        let progress =
+          (currentPlayerOrderIndex / window.playerOrder.length) * 100;
+        let progressElement = document.getElementById(
+          "player-progress-element"
+        );
+        progressElement.style.width = `${progress}%`;
       }, 1000);
     });
   });
