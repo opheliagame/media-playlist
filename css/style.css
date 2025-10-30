@@ -220,6 +220,21 @@ button {
   cursor: pointer;
 }
 
+#manual-mode-button {
+  font-size: small;
+  padding: 1rem;
+  cursor: pointer;
+  border: solid 1px var(--darkgray);
+}
+
+#manual-mode-button.on {
+  background-color: var(--highlight);
+}
+
+#manual-mode-button.off {
+  background-color: transparent;
+}
+
 #player-contents-container {
   aspect-ratio: 9/16;
   z-index: 0;
