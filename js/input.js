@@ -1,4 +1,5 @@
 import * as db from "./database.js";
+import { addPlaylistItemContent, setPlayerContent } from "./playlist.js";
 
 // clipboard events
 function handlePasteEvent(event) {

@@ -121,15 +121,17 @@ button {
 
 #main-container {
   flex: 1;
-  display: grid;
+  /* display: grid;
   grid-template-rows: 1fr minmax(120px, 0.5fr) 1fr;
-  grid-template-areas: "player" "info" "contents";
+  grid-template-areas: "player" "info" "contents"; */
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
   padding: 1rem;
 }
 
 #media-input {
-  grid-area: contents;
+  order: 3;
   border: 1px dashed var(--darkgray);
   width: 100%;
   overflow-x: auto;
@@ -158,6 +160,7 @@ button {
   aspect-ratio: 9/16;
   z-index: 0;
   position: relative;
+  overflow: none;
 }
 
 #player-controls-container {
@@ -258,6 +261,9 @@ button {
 
 #player-contents-container p {
   hyphens: none;
+  max-height: 100%;
+  text-overflow: none;
+  overflow: hidden;
 }
 
 img {
@@ -268,8 +274,8 @@ img {
 
 #playlist-contents-container {
   overflow-y: auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
 }
 
@@ -283,7 +289,8 @@ img {
   padding-left: 2px;
 
   cursor: pointer;
-  min-width: 6rem;
+
+  max-height: 6rem;
   overflow: hidden;
   position: relative;
 }
